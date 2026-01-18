@@ -1,0 +1,6 @@
+[submodule "butano"]
+	path = butano
+	url = https://github.com/GValiente/butano.git
+[submodule "butano-ext-scripts"]
+	path = butano-ext-scripts
+	url = https://github.com/breadbored/butano-ext-scripts.git
