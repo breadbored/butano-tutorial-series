@@ -5,7 +5,6 @@
 
 #include "bn_color.h"
 #include "bn_sprite_palette_item.h"
-#include "bn_sprite_text_generator.h"
 #include "bn_sprite_palette_ptr.h"
 #include "bn_span.h"
 
