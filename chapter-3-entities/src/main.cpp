@@ -3,6 +3,10 @@
  * Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License @ LICENSE.md file.
  */
 
+#define BN_CFG_LOG_ENABLED true
+#define BN_CFG_LOG_BACKEND BN_LOG_BACKEND_MGBA
+#include "bn_log.h"
+
 #include "bn_core.h"
 
 #include "bn_bg_palettes.h"
@@ -15,6 +19,7 @@
 #include "bn_vector.h"
 #include "bn_string.h"
 #include "bn_math.h"
+#include "bn_utility.h"
 
 #include "felt_32x32_font.hpp"
 
@@ -24,6 +29,36 @@
 #include "types.hpp"
 #include "block.hpp"
 #include "cursor.hpp"
+
+// This is how our levels will be built
+const u8 NUM_BLOCKS = 5;
+const LevelPair level_blocks[NUM_BLOCKS] = {
+    // Block 1
+    LevelPair(
+        BlockType::BlockType_DoubleWideY,
+        { 0, 0 }
+    ),
+    // Block 2
+    LevelPair(
+        BlockType::BlockType_DoubleWideY,
+        { 16, 0 }
+    ),
+    // Block 3
+    LevelPair(
+        BlockType::BlockType_DoubleWideY,
+        { -16, 0 }
+    ),
+    // Block 4
+    LevelPair(
+        BlockType::BlockType_DoubleWideX,
+        { -16, -24 }
+    ),
+    // Block 5
+    LevelPair(
+        BlockType::BlockType_DoubleWideX,
+        { 16, -24 }
+    ),
+};
 
 int main()
 {
@@ -42,12 +77,11 @@ int main()
         const s8 x_offset = -half_max + i;
 
         block_list.push_back(
-            Block({
-                x_offset * 40, // x
-                0  // y
-            })
+            Block(level_blocks[i].second, level_blocks[i].first)
         );
     }
+
+    cursor.block_vec = &block_list;
 
     while(true)
     {
@@ -60,7 +94,7 @@ int main()
                     block->position.y() - cursor.position.y()
                 };
 
-                if (bn::abs(distance.x()) < 32 && bn::abs(distance.y()) < 32) {
+                if (cursor.over_block(block)) {
                     cursor.grab_block(block);
                     break; // we found one, stop searching
                 }

@@ -11,11 +11,14 @@
 #include "bn_sprite_item.h"
 #include "bn_sprite_tiles_ptr.h"
 #include "bn_sprite_items_cursor.h"
+#include "bn_vector.h"
 #include "entity.hpp"
 #include "types.hpp"
 #include "utils.hpp"
 #include "block.hpp"
 #include "bn_keypad.h"
+
+#include "bn_log.h"
 
 class Cursor : public Entity {
 public:
@@ -41,35 +44,50 @@ public:
 
         // If we have a block, let's do something with it
         if (grabbed_block != nullptr) {
+            bn::point new_position = position;
+
             // If the X axis isn't locked, let's move the held block
             if (
                 grabbed_block->locked_axis != LockedAxis::XAxis
-                || grabbed_block->locked_axis != LockedAxis::BothAxis
+                && grabbed_block->locked_axis != LockedAxis::BothAxis
             ) {
                 if (bn::keypad::right_held() || bn::keypad::right_pressed()) {
-                    position.set_x(position.x() + 1);
-                    grabbed_block->position.set_x(position.x() + 1);
+                    new_position.set_x(new_position.x() + 1);
                 } else if (bn::keypad::left_held() || bn::keypad::left_pressed()) {
-                    position.set_x(position.x() - 1);
-                    grabbed_block->position.set_x(position.x() - 1);
+                    new_position.set_x(new_position.x() - 1);
                 }
             }
             // If the Y axis isn't locked, let's move the held block
             if (
                 grabbed_block->locked_axis != LockedAxis::YAxis
-                || grabbed_block->locked_axis != LockedAxis::BothAxis
+                && grabbed_block->locked_axis != LockedAxis::BothAxis
             ) {
                 if (bn::keypad::up_held() || bn::keypad::up_pressed()) {
-                    position.set_y(position.y() - 1);
-                    grabbed_block->position.set_y(position.y() - 1);
+                    new_position.set_y(new_position.y() - 1);
                 } else if (bn::keypad::down_held() || bn::keypad::down_pressed()) {
-                    position.set_y(position.y() + 1);
-                    grabbed_block->position.set_y(position.y() + 1);
+                    new_position.set_y(new_position.y() + 1);
                 }
             }
 
-            grabbed_block->position.set_x(position.x());
-            grabbed_block->position.set_y(position.y());
+            bool collided = false;
+
+            if (block_vec != nullptr) {
+                for (int i = 0; i < block_vec->size(); i++) {
+                    if (&block_vec->at(i) == grabbed_block) {
+                        continue;
+                    }
+                    if (grabbed_block->collides(&block_vec->at(i), new_position)) {
+                        collided = true;
+                    }
+                }
+            }
+
+            if (!collided) {
+                position.set_x(new_position.x());
+                position.set_y(new_position.y());
+                grabbed_block->position.set_x(new_position.x());
+                grabbed_block->position.set_y(new_position.y());
+            }
         } else { // We don't have a block, so let's move around
             if (bn::keypad::right_held() || bn::keypad::right_pressed()) {
                 position.set_x(position.x() + 1);
@@ -104,7 +122,16 @@ public:
         position.set_y(grabbed_block->position.y());
     }
 
+    bool over_block(Block *other) {
+        return (other->position.x() + other->bounds.first.x() <= this->position.x()) &&
+               (other->position.y() + other->bounds.first.y() <= this->position.y()) &&
+               (other->position.x() + other->bounds.second.x() >= this->position.x()) &&
+               (other->position.y() + other->bounds.second.y() >= this->position.y());
+    }
+
     bool searching_for_block = false;
+
+    bn::vector<Block, 5> *block_vec = nullptr;
 
 private:
     Block* grabbed_block = nullptr;

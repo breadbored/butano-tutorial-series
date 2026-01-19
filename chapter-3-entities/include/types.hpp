@@ -12,6 +12,8 @@
 #define BREAD_TYPES_HPP
 
 #include "tonc_types.h"
+#include "bn_utility.h"
+#include "bn_point.h"
 
 typedef unsigned int uint, eint;
 typedef unsigned short ushort, eshort;
@@ -52,5 +54,16 @@ enum LockedAxis : u8 {
     YAxis = 2,
     BothAxis = 3,
 };
+
+enum BlockType : u8 {
+    BlockType_DoubleWideY = 0,
+    BlockType_DoubleWideX = 1,
+    BlockType_SingleWideY = 2,
+    BlockType_SingleWideX = 3,
+    BlockType_BigSquare   = 4,
+};
+
+typedef bn::pair<bn::point, bn::point> Box;
+typedef bn::pair<BlockType, bn::point> LevelPair; // this is a shorthand for the level structure
 
 #endif
