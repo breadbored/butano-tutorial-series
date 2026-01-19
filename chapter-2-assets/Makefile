@@ -58,6 +58,7 @@ USERBUILD   	:=
 EXTTOOL     	:=  $(MAKE) fonts && $(MAKE) sprites
 EXTSCRIPTS  	:=  ../butano-ext-scripts
 EXTFONTS    	:=  fonts
+EXTEMU			:=  mGBA
 
 ifndef EXTSCRIPTSABS
 	export EXTSCRIPTSABS	:=	$(realpath $(EXTSCRIPTS))
@@ -80,6 +81,22 @@ include $(LIBBUTANOABS)/butano.mak
 include $(EXTSCRIPTSABS)/commands.mak
 
 .PHONY: sprites
+
+# OS detection for emulator launch command
+ifeq ($(OS),Windows_NT)
+    STARTEMU := start "" $(EXTEMU) $(notdir $(CURDIR)).gba
+else
+    UNAME_S := $(shell uname -s)
+    ifeq ($(UNAME_S),Linux)
+        STARTEMU := $(EXTEMU) $(notdir $(CURDIR)).gba
+    endif
+    ifeq ($(UNAME_S),Darwin)
+        STARTEMU := open -a $(EXTEMU) $(notdir $(CURDIR)).gba
+    endif
+endif
+
+run:
+	@$(STARTEMU)
 
 sprites:
 	@python3 scripts/convert-sprites.py
