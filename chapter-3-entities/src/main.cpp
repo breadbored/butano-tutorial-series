@@ -14,6 +14,7 @@
 
 #include "bn_vector.h"
 #include "bn_string.h"
+#include "bn_math.h"
 
 #include "felt_32x32_font.hpp"
 
@@ -21,6 +22,8 @@
 
 #include "colors.hpp"
 #include "types.hpp"
+#include "block.hpp"
+#include "cursor.hpp"
 
 int main()
 {
@@ -30,97 +33,46 @@ int main()
         bread::palettes::ColdfireGB::neutral_salmon
     );
 
-    // Chapter Name
-    bn::sprite_text_generator text_generator(
-        fonts::felt_32x32_sprite_font,
-        bread::palettes::ColdfireGB::sprite_palette_item
-    );
-    text_generator.set_center_alignment();
-    bn::string<15> title_message_string = "Assets";
-    bn::vector<bn::sprite_ptr, 15> title_message_sprites;
-    text_generator.generate(
-        0, -60,
-        title_message_string,
-        title_message_sprites
-    );
+    Cursor cursor = Cursor({0, -32});
 
-    // Chapter Number (I increased the vector size. you'll see why later)
-    bn::string<17> subtitle_message_string = "Chapter 2";
-    bn::vector<bn::sprite_ptr, 17> subtitle_message_sprites;
-    text_generator.generate(
-        0, -40,
-        subtitle_message_string,
-        subtitle_message_sprites
-    );
+    bn::vector<Block, 5> block_list;
 
-    // Chapter 2 code
-
-    // This is a "Sprite Item," which is the definition of the sprite.
-    bn::sprite_item block_sprite_item = bn::sprite_items::klotski_blocks;
-
-    // Every "Sprite Item" is the source, and we use the Sprite Item to make a "Sprite Pointer,"
-    // which is a "smart pointer" that will continue to exist as long as it is in an active scope
-    // (again, we'll cover scopes later, but just know it has to still be accessible to stay alive)
-    bn::sprite_ptr block = block_sprite_item.create_sprite(0, 0);
-    // You will now see the above sprite on screen at position (0,0) at the center of the screen
-
-    // Let's make a few more, and manage them in a vector (a list)
-    bn::vector<bn::sprite_ptr, 5> block_list;
     for (int i = 0; i < block_list.max_size(); i++) {
-        // I'm going to do a magic trick here...
-        // The GBA CPU doesn't know what division is, so if you do a division
-        // with `/`, it does some compiler magic to make it work. This is SLOW.
-        //
-        // However, if the denominator is a power of 2 (2, 4, 8, 16, 32, 64, 128, 256, etc),
-        // you can right-shift the bits once to divide by 2. Right-shift them twice to divide by 4.
-        // Right-shift them 3 times to divide by 8. Etc, etc. This is fast, and bypasses this limitation.
-        //
-        // All that to say, the following can also be read as `block_list.max_size() / 2`
-        const u8 half_size = block_list.max_size() >> 1;
-        const s8 adjusted_x_index = -half_size + i;
+        const u8 half_max = block_list.max_size() >> 1;
+        const s8 x_offset = -half_max + i;
 
-        // I'm just giving the index a name to reduce confusion shortly
-        const u8 sprite_index = i;
-
-        // Add the block to the list
         block_list.push_back(
-            block_sprite_item.create_sprite(
-                adjusted_x_index * 40,
-                48
-            )
-        );
-        // Tell the sprite to use the tile at `sprite_index`
-        block_list.at(i).set_tiles(
-            block_sprite_item.tiles_item().create_tiles(sprite_index)
+            Block({
+                x_offset * 40, // x
+                0  // y
+            })
         );
     }
 
-    // You will now see all 7 sprites.
-    // 1 above, 6 below from the list using different tiles from the spritesheet
-
-
     while(true)
     {
-        // Let's listen for when the A button is pressed
-        if (bn::keypad::a_pressed()) {
-            // when pressed (the first frame down), change the header text
+        if (cursor.searching_for_block) {
+            // check if the cursor is over a block
+            for (int i = 0; i < block_list.size(); i++) {
+                auto block = &block_list.at(i);
+                bn::point distance = {
+                    block->position.x() - cursor.position.x(),
+                    block->position.y() - cursor.position.y()
+                };
 
-            // title
-            title_message_sprites.clear();
-            text_generator.generate(
-                0, -60,
-                "Congrats!",
-                title_message_sprites
-            );
-            // subtitle
-            subtitle_message_sprites.clear();
-            text_generator.generate(
-                0, -40,
-                "You did Chapter 2",
-                subtitle_message_sprites
-            );
+                if (bn::abs(distance.x()) < 32 && bn::abs(distance.y()) < 32) {
+                    cursor.grab_block(block);
+                    break; // we found one, stop searching
+                }
+            }
         }
 
+        // every frame we need to tell our entities to update
+        cursor.update();
+        for (int i = 0; i < block_list.size(); i++) {
+            auto block = &block_list.at(i);
+            block->update();
+        }
         bn::core::update();
     }
 }

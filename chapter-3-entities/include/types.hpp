@@ -46,4 +46,11 @@ typedef const s16 cs16;
 typedef const s32 cs32;
 typedef const s64 cs64;
 
+enum LockedAxis : u8 {
+    NoAxis = 0,
+    XAxis = 1,
+    YAxis = 2,
+    BothAxis = 3,
+};
+
 #endif

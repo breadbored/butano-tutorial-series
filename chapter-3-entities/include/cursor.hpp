@@ -1,0 +1,121 @@
+/*
+ * Copyright (c) 2026 BreadCodes brad@bread.codes
+ * Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License @ LICENSE.md file.
+ */
+
+#ifndef BREAD_CURSOR_HPP
+#define BREAD_CURSOR_HPP
+
+#include "bn_point.h"
+#include "bn_sprite_ptr.h"
+#include "bn_sprite_item.h"
+#include "bn_sprite_tiles_ptr.h"
+#include "bn_sprite_items_cursor.h"
+#include "entity.hpp"
+#include "types.hpp"
+#include "utils.hpp"
+#include "block.hpp"
+#include "bn_keypad.h"
+
+class Cursor : public Entity {
+public:
+    Cursor(bn::point position)
+        : Entity(
+            bn::sprite_items::cursor,
+            position
+        ) {
+        p_sprite.set_z_order(-10);
+    }
+
+    /**
+     * @brief Call this every frame
+     */
+    void update() override {
+        // When A is pressed, the cursor should go into "search" mode
+        if (bn::keypad::a_pressed() && grabbed_block == nullptr) {
+            searching_for_block = true;
+        }
+        if (bn::keypad::a_released() && grabbed_block != nullptr) {
+            release_block();
+        }
+
+        // If we have a block, let's do something with it
+        if (grabbed_block != nullptr) {
+            // If the X axis isn't locked, let's move the held block
+            if (
+                grabbed_block->locked_axis != LockedAxis::XAxis
+                || grabbed_block->locked_axis != LockedAxis::BothAxis
+            ) {
+                if (bn::keypad::right_held() || bn::keypad::right_pressed()) {
+                    position.set_x(position.x() + 1);
+                    grabbed_block->position.set_x(position.x() + 1);
+                } else if (bn::keypad::left_held() || bn::keypad::left_pressed()) {
+                    position.set_x(position.x() - 1);
+                    grabbed_block->position.set_x(position.x() - 1);
+                }
+            }
+            // If the Y axis isn't locked, let's move the held block
+            if (
+                grabbed_block->locked_axis != LockedAxis::YAxis
+                || grabbed_block->locked_axis != LockedAxis::BothAxis
+            ) {
+                if (bn::keypad::up_held() || bn::keypad::up_pressed()) {
+                    position.set_y(position.y() - 1);
+                    grabbed_block->position.set_y(position.y() - 1);
+                } else if (bn::keypad::down_held() || bn::keypad::down_pressed()) {
+                    position.set_y(position.y() + 1);
+                    grabbed_block->position.set_y(position.y() + 1);
+                }
+            }
+
+            grabbed_block->position.set_x(position.x());
+            grabbed_block->position.set_y(position.y());
+        } else { // We don't have a block, so let's move around
+            if (bn::keypad::right_held() || bn::keypad::right_pressed()) {
+                position.set_x(position.x() + 1);
+            }
+            if (bn::keypad::left_held() || bn::keypad::left_pressed()) {
+                position.set_x(position.x() - 1);
+            }
+            if (bn::keypad::up_held() || bn::keypad::up_pressed()) {
+                position.set_y(position.y() - 1);
+            }
+            if (bn::keypad::down_held() || bn::keypad::down_pressed()) {
+                position.set_y(position.y() + 1);
+            }
+        }
+
+        p_sprite.set_tiles(
+            sprite_item.tiles_item().create_tiles(
+                grabbed_block == nullptr ? 0 : 1
+            )
+        );
+
+        Entity::update(); // call the underlying Entity's update
+    }
+
+    /**
+     * @brief Grab a Block
+     */
+    void grab_block(Block *block) {
+        searching_for_block = false;
+        grabbed_block = block;
+        position.set_x(grabbed_block->position.x());
+        position.set_y(grabbed_block->position.y());
+    }
+
+    bool searching_for_block = false;
+
+private:
+    Block* grabbed_block = nullptr;
+
+    /**
+     * @brief Grab a Block
+     */
+    void release_block() {
+        grabbed_block = nullptr;
+        searching_for_block = false;
+    }
+};
+
+#endif
