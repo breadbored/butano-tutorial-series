@@ -78,3 +78,19 @@ endif
 include $(LIBBUTANOABS)/butano.mak
 
 include $(EXTSCRIPTSABS)/commands.mak
+
+# OS detection for emulator launch command
+ifeq ($(OS),Windows_NT)
+    STARTEMU := start "" $(EXTEMU) $(notdir $(CURDIR)).gba
+else
+    UNAME_S := $(shell uname -s)
+    ifeq ($(UNAME_S),Linux)
+        STARTEMU := $(EXTEMU) $(notdir $(CURDIR)).gba
+    endif
+    ifeq ($(UNAME_S),Darwin)
+        STARTEMU := open -a $(EXTEMU) $(notdir $(CURDIR)).gba
+    endif
+endif
+
+run:
+	@$(STARTEMU)
