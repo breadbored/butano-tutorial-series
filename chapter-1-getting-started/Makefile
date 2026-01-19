@@ -58,6 +58,7 @@ USERBUILD   	:=
 EXTTOOL     	:=  $(MAKE) fonts
 EXTSCRIPTS  	:=  ../butano-ext-scripts
 EXTFONTS    	:=  fonts
+EXTEMU			:=  mGBA
 
 ifndef EXTSCRIPTSABS
 	export EXTSCRIPTSABS	:=	$(realpath $(EXTSCRIPTS))
