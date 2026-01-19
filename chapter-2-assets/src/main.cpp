@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2026 BreadCodes brad@bread.codes
- * MIT License @ LICENSE.md file.
+ * Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License @ LICENSE.md file.
  */
 
 // Your main.cpp should always import `bn_core.h`
