@@ -55,7 +55,7 @@ USERLIBS    	:=
 DEFAULTLIBS 	:=
 STACKTRACE		:=
 USERBUILD   	:=
-EXTTOOL     	:=  $(MAKE) fonts
+EXTTOOL     	:=  $(MAKE) fonts && $(MAKE) sprites
 EXTSCRIPTS  	:=  ../butano-ext-scripts
 EXTFONTS    	:=  fonts
 
@@ -78,3 +78,8 @@ endif
 include $(LIBBUTANOABS)/butano.mak
 
 include $(EXTSCRIPTSABS)/commands.mak
+
+.PHONY: sprites
+
+sprites:
+	@python3 scripts/convert-sprites.py
