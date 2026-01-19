@@ -1,14 +1,17 @@
 /*
  * Copyright (c) 2026 BreadCodes brad@bread.codes
- * Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License @ LICENSE.md file.
+ * MIT License @ LICENSE.md file.
  */
+
+#ifndef BREAD_COLORS_HPP
+#define BREAD_COLORS_HPP
 
 #include "bn_color.h"
 #include "bn_sprite_palette_item.h"
 #include "bn_sprite_palette_ptr.h"
 #include "bn_span.h"
 
- namespace bread {
+namespace bread {
     #include "tonc_types.h"
 
     /**
@@ -209,4 +212,6 @@
         };
 
     };
- };
+};
+
+#endif
