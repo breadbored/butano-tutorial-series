@@ -85,23 +85,7 @@ int main()
 
     while(true)
     {
-        if (cursor.searching_for_block) {
-            // check if the cursor is over a block
-            for (int i = 0; i < block_list.size(); i++) {
-                auto block = &block_list.at(i);
-                bn::point distance = {
-                    block->position.x() - cursor.position.x(),
-                    block->position.y() - cursor.position.y()
-                };
-
-                if (cursor.over_block(block)) {
-                    cursor.grab_block(block);
-                    break; // we found one, stop searching
-                }
-            }
-        }
-
-        // every frame we need to tell our entities to update
+        // every frame we need to tell our entities a new frame is being drawn
         cursor.update();
         for (int i = 0; i < block_list.size(); i++) {
             auto block = &block_list.at(i);

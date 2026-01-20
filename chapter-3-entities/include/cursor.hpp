@@ -34,9 +34,20 @@ public:
      * @brief Call this every frame
      */
     void update() override {
-        // When A is pressed, the cursor should go into "search" mode
+        // When A is pressed, the cursor should find a block to grab
         if (bn::keypad::a_pressed() && grabbed_block == nullptr) {
-            searching_for_block = true;
+            for (int i = 0; i < block_vec->size(); i++) {
+                auto block = &block_vec->at(i);
+                bn::point distance = {
+                    block->position.x() - this->position.x(),
+                    block->position.y() - this->position.y()
+                };
+
+                if (this->over_block(block)) {
+                    this->grab_block(block);
+                    break; // we found one, stop searching
+                }
+            }
         }
         if (bn::keypad::a_released() && grabbed_block != nullptr) {
             release_block();
@@ -116,7 +127,6 @@ public:
      * @brief Grab a Block
      */
     void grab_block(Block *block) {
-        searching_for_block = false;
         grabbed_block = block;
         position.set_x(grabbed_block->position.x());
         position.set_y(grabbed_block->position.y());
@@ -129,11 +139,15 @@ public:
                (other->position.y() + other->bounds.second.y() >= this->position.y());
     }
 
-    bool searching_for_block = false;
-
+    /**
+     * @brief A pointer reference to the block list
+     */
     bn::vector<Block, 5> *block_vec = nullptr;
 
 private:
+    /**
+     * @brief A pointer reference to the block grabbed
+     */
     Block* grabbed_block = nullptr;
 
     /**
@@ -141,7 +155,6 @@ private:
      */
     void release_block() {
         grabbed_block = nullptr;
-        searching_for_block = false;
     }
 };
 
