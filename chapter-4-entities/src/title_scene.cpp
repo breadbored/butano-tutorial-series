@@ -22,8 +22,8 @@ void title_scene() {
         bread::palettes::ColdfireGB::sprite_palette_item
     );
     text_generator.set_center_alignment();
-    bn::string<6> title_message_string = "Entities";
-    bn::vector<bn::sprite_ptr, 6> title_message_sprites;
+    bn::string<8> title_message_string = "Entities";
+    bn::vector<bn::sprite_ptr, 8> title_message_sprites;
     text_generator.generate(
         0, -60,
         title_message_string,

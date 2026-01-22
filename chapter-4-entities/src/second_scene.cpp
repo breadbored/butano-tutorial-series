@@ -45,27 +45,22 @@ const LevelPair level_blocks[NUM_BLOCKS] = {
     ),
 };
 
-int second_scene()
-{
-    bn::core::init();
-
-    bn::bg_palettes::set_transparent_color(
-        bread::palettes::ColdfireGB::neutral_salmon
-    );
-
+void second_scene() {
+    // Set up the Cursor we created
     Cursor cursor = Cursor({0, -32});
 
+    // Track the blocks we're going to interact with
     bn::vector<Block, 5> block_list;
-
+    // Init those blocks
     for (int i = 0; i < block_list.max_size(); i++) {
         const u8 half_max = block_list.max_size() >> 1;
         const s8 x_offset = -half_max + i;
-
         block_list.push_back(
             Block(level_blocks[i].second, level_blocks[i].first)
         );
     }
 
+    // Give cursor reference to the list of blocks
     cursor.block_vec = &block_list;
 
     while(true)
