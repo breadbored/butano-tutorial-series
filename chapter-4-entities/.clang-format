@@ -1,0 +1,28 @@
+BasedOnStyle: LLVM
+AlignArrayOfStructures: Left
+UseTab: Never
+AlignConsecutiveMacros: None
+AlignTrailingComments: true
+IndentWidth: 4
+TabWidth: 4
+BreakBeforeBraces: Attach
+IndentCaseLabels: true
+ColumnLimit: 0
+AccessModifierOffset: -4
+NamespaceIndentation: All
+FixNamespaceComments: false
+IndentPPDirectives: BeforeHash
+AlignAfterOpenBracket: BlockIndent
+BraceWrapping:
+  AfterControlStatement: true
+  AfterEnum: true
+  AfterStruct: true
+  AfterUnion: true
+  AfterClass: true
+  BeforeCatch: true
+  BeforeElse: true
+  IndentBraces: false
+  SplitEmptyFunction: true
+  SplitEmptyRecord: true
+  SplitEmptyNamespace: true
+  AfterFunction: true

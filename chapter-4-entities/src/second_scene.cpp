@@ -3,34 +3,19 @@
  * Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License @ LICENSE.md file.
  */
 
-#define BN_CFG_LOG_ENABLED true
-#define BN_CFG_LOG_BACKEND BN_LOG_BACKEND_MGBA
-#include "bn_log.h"
-
 #include "bn_core.h"
 
 #include "bn_bg_palettes.h"
-#include "bn_sprite_ptr.h"
-#include "bn_sprite_text_generator.h"
-#include "bn_sprite_tiles_ptr.h"
-
-#include "bn_keypad.h"
 
 #include "bn_vector.h"
-#include "bn_string.h"
-#include "bn_math.h"
-#include "bn_utility.h"
-
-#include "felt_32x32_font.hpp"
-
-#include "bn_sprite_items_klotski_blocks.h"
 
 #include "colors.hpp"
 #include "types.hpp"
 #include "block.hpp"
 #include "cursor.hpp"
 
-// This is how our levels will be built
+// This is sorta how our levels will be built
+// This is just for a draft
 const u8 NUM_BLOCKS = 5;
 const LevelPair level_blocks[NUM_BLOCKS] = {
     // Block 1
@@ -60,7 +45,7 @@ const LevelPair level_blocks[NUM_BLOCKS] = {
     ),
 };
 
-int main()
+int second_scene()
 {
     bn::core::init();
 

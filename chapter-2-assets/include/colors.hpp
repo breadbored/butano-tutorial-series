@@ -19,7 +19,7 @@ namespace bread {
      *
      * Color accuracy is lost in this process
      */
-    bn::color rgb888_to_bn_color(u8 r, u8 g, u8 b) {
+    inline bn::color rgb888_to_bn_color(u8 r, u8 g, u8 b) {
         return bn::color(
             r >> 3,
             g >> 3,
@@ -27,7 +27,7 @@ namespace bread {
         );
     }
 
-    bn::sprite_palette_item single_color_palette(bn::color color) {
+    inline bn::sprite_palette_item single_color_palette(bn::color color) {
        bn::color colors_arr[16] = {
            color, color, color, color,
            color, color, color, color,
@@ -42,7 +42,7 @@ namespace bread {
      * \brief Color palettes I've assembled from lospec.com!
      */
     namespace palettes {
-        bn::span<bn::color> fill_16_color_palette(
+        inline bn::span<bn::color> fill_16_color_palette(
             bn::color *arr,
             bn::color a,
             bn::color b,
@@ -80,79 +80,13 @@ namespace bread {
         }
 
         /**
-        * \brief DIM-4
-        * https://lospec.com/palette-list/dim-4
-        *
-        * An orange shifted palette
-        */
-        namespace DIM4 {
-            bn::color colors_arr[16];
-
-            /**
-            * @brief
-            *
-            * #201616
-            *
-            * A slightly orange ebony, resembling brown
-            */
-            const bn::color bitter_black = rgb888_to_bn_color(
-                0x20, 0x16, 0x16
-            );
-
-            /**
-            * @brief
-            *
-            * #de422c
-            *
-            * A bold orange
-            */
-            const bn::color orange_punch = rgb888_to_bn_color(
-                0xDE, 0x42, 0x2C
-            );
-
-            /**
-            * @brief
-            *
-            * #f47a64
-            *
-            * A desaturated orange
-            */
-            const bn::color salmon_orange = rgb888_to_bn_color(
-                0xF4, 0x7A, 0x64
-            );
-
-            /**
-            * @brief
-            *
-            * #f0c8a0
-            *
-            * A creamy, desaturated orange
-            */
-            const bn::color rustic_peach = rgb888_to_bn_color(
-                0xF0, 0xC8, 0xA0
-            );
-
-            const bn::sprite_palette_item sprite_palette_item = bn::sprite_palette_item(
-                fill_16_color_palette(
-                    colors_arr,
-                    rustic_peach,
-                    salmon_orange,
-                    orange_punch,
-                    bitter_black
-                ),
-                bn::bpp_mode::BPP_4
-            );
-
-        };
-
-        /**
         * \brief Coldfire GB
         * https://lospec.com/palette-list/coldfire-gb
         *
         * A 4 color cool and warm palette
         */
         namespace ColdfireGB {
-            bn::color colors_arr[16];
+            inline bn::color colors_arr[16];
 
             /**
              * @brief
