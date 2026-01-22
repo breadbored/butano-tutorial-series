@@ -5,11 +5,8 @@
 
 #include "bn_core.h"
 
-#include "bn_bg_palettes.h"
-
 #include "bn_vector.h"
 
-#include "colors.hpp"
 #include "types.hpp"
 #include "block.hpp"
 #include "cursor.hpp"
