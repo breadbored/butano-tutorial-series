@@ -27,12 +27,20 @@ class Container;
 
 class Cursor : public Entity {
 public:
-    Cursor(bn::point position)
+    Cursor(bn::point _position)
         : Entity(
             bn::sprite_items::cursor,
-            position
+            _position
         ) {
         p_sprite.set_z_order(-10);
+    }
+
+    ~Cursor() {
+        // called on destroy!
+    }
+
+    void update() {
+        BN_ASSERT(true, "This shouldn't be called. The other update function is required.");
     }
 
     /**
@@ -44,11 +52,6 @@ public:
         if (bn::keypad::a_pressed() && grabbed_block == nullptr) {
             for (int i = 0; i < block_vec->size(); i++) {
                 auto block = &block_vec->at(i);
-                bn::point distance = {
-                    block->position.x() - this->position.x(),
-                    block->position.y() - this->position.y()
-                };
-
                 if (this->over_block(block)) {
                     this->grab_block(block);
                     break; // we found one, stop searching

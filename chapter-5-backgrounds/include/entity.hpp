@@ -12,12 +12,14 @@
 
 class Entity {
 public:
-    Entity(bn::sprite_item sprite_item, bn::point position)
-        : sprite_item(sprite_item),
-          p_sprite(sprite_item.create_sprite(position)),
-          position(position)
-    {
+    Entity(bn::sprite_item _sprite_item, bn::point _position)
+        : sprite_item(_sprite_item),
+          p_sprite(_sprite_item.create_sprite(_position)),
+          position(_position)
+    {}
 
+    virtual ~Entity() {
+        // called on destroy!
     }
 
     /**
@@ -27,15 +29,14 @@ public:
         this->p_sprite.set_position(position);
     }
 
+    bn::sprite_item sprite_item;
+    bn::sprite_ptr p_sprite;
     bn::point position = {
         0, // x
         0  // y
     };
-    bn::sprite_ptr p_sprite;
-    bn::sprite_item sprite_item;
 
 private:
-
 };
 
 #endif

@@ -16,20 +16,24 @@
 
 class Block : public Entity {
 public:
-    Block(bn::point position, BlockType block_type)
+    Block(bn::point _position, BlockType _block_type)
         : Entity(
             bn::sprite_items::klotski_blocks,
-            position
-        ), _type(block_type) {
+            _position
+        ), _type(_block_type) {
         this->init();
     }
-    Block(bn::point position)
+    Block(bn::point _position)
         : Entity(
             bn::sprite_items::klotski_blocks,
-            position
+            _position
         ), _type(BlockType::BlockType_DoubleWideY) {
         this->init();
     }
+
+    ~Block() {
+        // called on destroy!
+    };
 
     void init() {
         // set the locked axis
@@ -110,12 +114,12 @@ public:
                (possible_position.y() + this->bounds.second.y() > other->position.y() + other->bounds.first.y());
     }
 
-    bool collides_with_wall(bn::point possible_position, Box bounds) {
+    bool collides_with_wall(bn::point possible_position, Box container_bounds) {
         return (
-            (possible_position.x() + this->bounds.first.x() < bounds.first.x())  ||
-            (possible_position.y() + this->bounds.first.y() < bounds.first.y())  ||
-            (possible_position.x() + this->bounds.second.x() > bounds.second.x()) ||
-            (possible_position.y() + this->bounds.second.y() > bounds.second.y())
+            (possible_position.x() + this->bounds.first.x() < container_bounds.first.x())  ||
+            (possible_position.y() + this->bounds.first.y() < container_bounds.first.y())  ||
+            (possible_position.x() + this->bounds.second.x() > container_bounds.second.x()) ||
+            (possible_position.y() + this->bounds.second.y() > container_bounds.second.y())
         );
     }
 

@@ -31,9 +31,9 @@ constexpr u8 CONTAINER_BG_HEIGHT = 32;
 template <u8 NUM_BLOCKS>
 class Container {
 public:
-    Container(u8 width, u8 height, const LevelPair *level_blocks, u8 num_level_blocks)
-    : width(width), height(height),
-      actual_width((width - 2) * 8), actual_height((height - 2) * 8) {
+    Container(u8 _width, u8 _height, const LevelPair *level_blocks, u8 num_level_blocks)
+    : width(_width), height(_height),
+      actual_width((_width - 2) * 8), actual_height((_height - 2) * 8) {
         // Make sure there's an even width and height of tiles
         BN_ASSERT(width % 2 == 0 && height % 2 == 0, "The tile map must be an even number height and width");
 
@@ -42,8 +42,6 @@ public:
 
         // Init blocks
         for (int i = 0; i < block_list.max_size(); i++) {
-            const u8 half_max = block_list.max_size() >> 1;
-            const s8 x_offset = -half_max + i;
             block_list.push_back(
                 Block(level_blocks[i].second, level_blocks[i].first)
             );
@@ -53,6 +51,10 @@ public:
         clear_container(CONTAINER_BG_WIDTH, CONTAINER_BG_HEIGHT, _ui_cells, _map_item, _bg);
         // draw the container
         build_container(CONTAINER_BG_WIDTH, CONTAINER_BG_HEIGHT, width, height, _ui_cells, _map_item, _bg);
+    }
+
+    ~Container() {
+        // called on destroy!
     }
 
     u8 width = 16;
