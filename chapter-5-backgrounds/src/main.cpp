@@ -29,8 +29,12 @@ int main()
                 title_scene();
                 break;
             }
-            case SceneEnum::SecondScene: {
-                second_scene();
+            case SceneEnum::ButanoScene: {
+                butano_card_scene();
+                break;
+            }
+            case SceneEnum::GameScene: {
+                game_scene();
                 break;
             }
             default: {

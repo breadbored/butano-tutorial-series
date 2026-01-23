@@ -7,6 +7,7 @@
 #define BREAD_SCENES_HPP
 
 void title_scene();
-void second_scene();
+void butano_card_scene();
+void game_scene();
 
 #endif

@@ -50,7 +50,8 @@ typedef const s64 cs64;
 
 enum SceneEnum : u8 {
     TitleScene = 0,
-    SecondScene = 1,
+    ButanoScene = 1,
+    GameScene = 2,
 };
 
 enum LockedAxis : u8 {

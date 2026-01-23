@@ -44,7 +44,7 @@ const LevelPair level_blocks[NUM_BLOCKS] = {
     ),
 };
 
-void second_scene() {
+void game_scene() {
     bn::bg_palettes::set_transparent_color(
         bread::palettes::VIVIDMEMORY8::blue
     );
