@@ -217,8 +217,8 @@ namespace bread {
                 fill_16_color_palette(
                     bg_colors_arr,
                     yellow,
-                    deep_dark_maroon,
                     orange,
+                    deep_dark_maroon,
                     red,
                     dark_blue,
                     blue,

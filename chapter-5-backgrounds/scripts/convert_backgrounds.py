@@ -17,7 +17,7 @@ reg = re.compile(r"\.[a-zA-Z]+$")
 def convert_bgs():
     root_dir = Path("./")
 
-    for type in ["tiles", "regular"]:
+    for type in ["tiles", "palettes", "regular"]:
         if len(os.listdir(root_dir / "backgrounds" / type)) > 0:
             print("\n\nStarting EXTTOOL asset conversion")
 
@@ -56,8 +56,12 @@ def convert_bgs():
                     raise Exception("""Background tiles must be 8x8 each""")
             elif type == "regular":
                 pass
+            elif type == "palettes":
+                pass
 
-            color_depth, unused_color = find_color_depth_and_unused_color(img.getdata())
+            color_depth, unused_color, num_colors = find_color_depth_and_unused_color(
+                img.getdata()
+            )
 
             # unlikely, but if true, we have a problem
             if not unused_color:
@@ -114,6 +118,15 @@ def convert_bgs():
                     json.dump(
                         {
                             "type": "regular_bg",
+                        },
+                        f,
+                    )
+                elif type == "palettes":
+                    json.dump(
+                        {
+                            "type": "bg_palette",
+                            "bpp_mode": "bpp_4" if color_depth == 16 else "bpp_8",
+                            "colors_count": num_colors,
                         },
                         f,
                     )

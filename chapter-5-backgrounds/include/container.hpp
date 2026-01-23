@@ -15,6 +15,7 @@
 #include "bn_regular_bg_ptr.h"
 #include "bn_regular_bg_map_ptr.h"
 #include "bn_regular_bg_tiles_items_container.h"
+#include "bn_bg_palette_items_container_pal.h"
 #include "bn_assert.h"
 
 #include "bn_vector.h"
@@ -58,6 +59,7 @@ public:
     u8 height = 16;
     u8 actual_width = 16 * 8;
     u8 actual_height = 16 * 8;
+    bn::point relative_position = {0, 0};
 
     // Scene stuff
     Cursor cursor = Cursor({0, -32});
@@ -76,15 +78,21 @@ public:
 
     bn::point tl() {
         return bn::point({
-            -(actual_width >> 1), // aka, -(actual_width / 2)
-            -(actual_height >> 1) // aka, -(actual_height / 2)
+            relative_position.x() + -(actual_width >> 1), // aka, -(actual_width / 2)
+            relative_position.y() + -(actual_height >> 1) // aka, -(actual_height / 2)
         });
     }
     bn::point br() {
         return bn::point({
-            (actual_width >> 1),
-            (actual_height >> 1)
+            relative_position.x() + (actual_width >> 1),
+            relative_position.y() + (actual_height >> 1)
         });
+    }
+    Box bounds() {
+        return Box(
+            tl(),
+            br()
+        );
     }
 
 private:
@@ -93,7 +101,7 @@ private:
     bn::regular_bg_map_item _map_item = bn::regular_bg_map_item(*_ui_cells, bn::size(CONTAINER_BG_WIDTH, CONTAINER_BG_HEIGHT));
     bn::regular_bg_item _bg_item = bn::regular_bg_item(
         bn::regular_bg_tiles_items::container,
-        bread::palettes::VIVIDMEMORY8::bg_palette_item,
+        bn::bg_palette_items::container_pal,
         _map_item
     );
     bn::regular_bg_ptr _bg = _bg_item.create_bg(0, 0);

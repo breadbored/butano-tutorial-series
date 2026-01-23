@@ -67,7 +67,9 @@ def convert_sprites():
 
     If you have a 8x8 sprite with 3 frames, the dimensions should be 8x24, where it is a vertical strip of sprite tiles.""")
 
-        color_depth, unused_color = find_color_depth_and_unused_color(img.getdata())
+        color_depth, unused_color, _num_colors = find_color_depth_and_unused_color(
+            img.getdata()
+        )
 
         # unlikely, but if true, we have a problem
         if not unused_color:

@@ -100,7 +100,7 @@ public:
             }
 
             // Adding the Container edge collision check
-            if (grabbed_block->collides_with_wall(new_position, container->tl(), container->br())) {
+            if (grabbed_block->collides_with_wall(new_position, container->bounds())) {
                 collided = true;
             }
 
