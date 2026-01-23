@@ -27,13 +27,13 @@ int main()
     bn::core::init();
 
     bn::bg_palettes::set_transparent_color(
-        bread::palettes::ColdfireGB::neutral_salmon
+        bread::palettes::VIVIDMEMORY8::creamy_white
     );
 
     // Chapter Name
     bn::sprite_text_generator text_generator(
         fonts::felt_32x32_sprite_font,
-        bread::palettes::ColdfireGB::sprite_palette_item
+        bread::palettes::VIVIDMEMORY8::sprite_palette_item
     );
     text_generator.set_center_alignment();
     bn::string<15> title_message_string = "Assets";

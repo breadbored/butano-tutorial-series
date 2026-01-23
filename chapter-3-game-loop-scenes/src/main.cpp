@@ -19,7 +19,7 @@ int main()
     bn::core::init();
 
     bn::bg_palettes::set_transparent_color(
-        bread::palettes::ColdfireGB::neutral_salmon
+        bread::palettes::VIVIDMEMORY8::creamy_white
     );
 
     while(true)

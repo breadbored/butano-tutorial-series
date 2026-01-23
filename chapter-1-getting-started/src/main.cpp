@@ -30,7 +30,7 @@ int main()
 
     // Set the color of the screen when a background doesn't cover that section
     bn::bg_palettes::set_transparent_color(
-        bread::palettes::ColdfireGB::neutral_salmon
+        bread::palettes::VIVIDMEMORY8::creamy_white
     );
 
     // Create the text generator, using the font of our choice
@@ -38,7 +38,7 @@ int main()
         // font
         fonts::felt_32x32_sprite_font,
         // optionally define a palette for color
-        bread::palettes::ColdfireGB::sprite_palette_item
+        bread::palettes::VIVIDMEMORY8::sprite_palette_item
     );
 
     // and let's put the positional anchor in the center of the text

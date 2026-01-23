@@ -47,12 +47,16 @@ namespace bread {
             bn::color a,
             bn::color b,
             bn::color c,
-            bn::color d
+            bn::color d,
+            bn::color e,
+            bn::color f,
+            bn::color g,
+            bn::color h
         ) {
             arr[0] = bn::color(0, 0, 0);
 
             for (u8 i = 1; i < 16; i++) {
-                switch ((i - 1) & 3) {
+                switch ((i - 1) & 7) {
                     case 0: {
                         arr[i] = a;
                         break;
@@ -69,6 +73,22 @@ namespace bread {
                         arr[i] = d;
                         break;
                     }
+                    case 4: {
+                        arr[i] = e;
+                        break;
+                    }
+                    case 5: {
+                        arr[i] = f;
+                        break;
+                    }
+                    case 6: {
+                        arr[i] = g;
+                        break;
+                    }
+                    case 7: {
+                        arr[i] = h;
+                        break;
+                    }
                     default:
                         break;
                 }
@@ -80,65 +100,113 @@ namespace bread {
         }
 
         /**
-        * \brief Coldfire GB
-        * https://lospec.com/palette-list/coldfire-gb
+        * \brief VIVIDMEMORY8
+        * https://lospec.com/palette-list/vividmemory8
         *
         * A 4 color cool and warm palette
         */
-        namespace ColdfireGB {
+        namespace VIVIDMEMORY8 {
             inline bn::color colors_arr[16];
 
             /**
              * @brief
              *
-             * #46425e
+             * #381631
              *
-             * A desaturated navy blue
+             * Deep Dark Maroon
              */
-            const bn::color neutral_navy = rgb888_to_bn_color(
-                0x46, 0x42, 0x5E
+            const bn::color deep_dark_maroon = rgb888_to_bn_color(
+                0x38, 0x16, 0x31
             );
 
             /**
              * @brief
              *
-             * #5b768d
+             * #d8dcb4
              *
-             * A denim blue
+             * A creamy white
              */
-            const bn::color denim_jeans = rgb888_to_bn_color(
-                0x5B, 0x76, 0x8D
+            const bn::color creamy_white = rgb888_to_bn_color(
+                0xD8, 0xDC, 0xB4
             );
 
             /**
              * @brief
              *
-             * #d17c7c
+             * #e21c61
              *
-             * A desaturated salmon
+             * Red
              */
-            const bn::color neutral_salmon = rgb888_to_bn_color(
-                0xD1, 0x7C, 0x7C
+            const bn::color red = rgb888_to_bn_color(
+                0xE2, 0x1C, 0x61
             );
 
             /**
              * @brief
              *
-             * #f6c6a8
+             * #e26159
              *
-             * A creamy, desaturated peach
+             * An orange
              */
-            const bn::color light_peach = rgb888_to_bn_color(
-                0xF6, 0xC6, 0xA8
+            const bn::color orange = rgb888_to_bn_color(
+                0xE2, 0x61, 0x59
+            );
+
+            /**
+             * @brief
+             *
+             * #fea85f
+             *
+             * A yellow
+             */
+            const bn::color yellow = rgb888_to_bn_color(
+                0xFE, 0xA8, 0x5F
+            );
+
+            /**
+             * @brief
+             *
+             * #105390
+             *
+             * A dark blue
+             */
+            const bn::color dark_blue = rgb888_to_bn_color(
+                0x10, 0x53, 0x90
+            );
+
+            /**
+             * @brief
+             *
+             * #1b958d
+             *
+             * A blue
+             */
+            const bn::color blue = rgb888_to_bn_color(
+                0x1B, 0x95, 0x8D
+            );
+
+            /**
+             * @brief
+             *
+             * #5eb6ad
+             *
+             * A cyan
+             */
+            const bn::color cyan = rgb888_to_bn_color(
+                0x5E, 0xB6, 0xAD
             );
 
             const bn::sprite_palette_item sprite_palette_item = bn::sprite_palette_item(
                 fill_16_color_palette(
                     colors_arr,
-                    neutral_navy,
-                    denim_jeans,
-                    neutral_salmon,
-                    light_peach
+                    deep_dark_maroon,
+                    creamy_white,
+                    red,
+                    orange,
+                    yellow,
+                    dark_blue,
+                    blue,
+                    cyan
                 ),
                 bn::bpp_mode::BPP_4
             );
