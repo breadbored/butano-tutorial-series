@@ -20,6 +20,14 @@
 
 #include "bn_log.h"
 
+// this is a forward declaration
+template <u8 NUM_BLOCKS>
+class Container;
+// this is saying "we promise this will be defined later."
+// the purpose of the forward declaration is to prevent circular dependencies.
+// Container imports Cursor, so Cursor can't import Container.
+// If you make this promise, Cursor will trust that this will be defined later.
+
 class Cursor : public Entity {
 public:
     Cursor(bn::point position)
@@ -33,7 +41,8 @@ public:
     /**
      * @brief Call this every frame
      */
-    void update() override {
+    template <u8 NUM_BLOCKS>
+    void update(Container<NUM_BLOCKS> *container, bn::vector<Block, 5> *block_vec) {
         // When A is pressed, the cursor should find a block to grab
         if (bn::keypad::a_pressed() && grabbed_block == nullptr) {
             for (int i = 0; i < block_vec->size(); i++) {
@@ -138,11 +147,6 @@ public:
                (other->position.x() + other->bounds.second.x() >= this->position.x()) &&
                (other->position.y() + other->bounds.second.y() >= this->position.y());
     }
-
-    /**
-     * @brief A pointer reference to the block list
-     */
-    bn::vector<Block, 5> *block_vec = nullptr;
 
 private:
     /**
