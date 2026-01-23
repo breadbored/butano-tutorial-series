@@ -17,21 +17,21 @@
 
 void second_scene() {
     bn::bg_palettes::set_transparent_color(
-        bread::palettes::VIVIDMEMORY8::deep_dark_maroon
+        bread::palettes::VIVIDMEMORY8::dark_blue
     );
 
     // Make a new sprite palette to change the font color
     const bn::sprite_palette_item sprite_palette_item = bn::sprite_palette_item(
         bread::palettes::fill_16_color_palette(
             bread::palettes::VIVIDMEMORY8::colors_arr,
-            bread::palettes::VIVIDMEMORY8::creamy_white,
-            bread::palettes::VIVIDMEMORY8::deep_dark_maroon,
-            bread::palettes::VIVIDMEMORY8::red,
-            bread::palettes::VIVIDMEMORY8::orange,
             bread::palettes::VIVIDMEMORY8::yellow,
+            bread::palettes::VIVIDMEMORY8::orange,
+            bread::palettes::VIVIDMEMORY8::red,
+            bread::palettes::VIVIDMEMORY8::deep_dark_maroon,
             bread::palettes::VIVIDMEMORY8::dark_blue,
             bread::palettes::VIVIDMEMORY8::blue,
-            bread::palettes::VIVIDMEMORY8::cyan
+            bread::palettes::VIVIDMEMORY8::cyan,
+            bread::palettes::VIVIDMEMORY8::creamy_white
         ),
         bn::bpp_mode::BPP_4
     );
