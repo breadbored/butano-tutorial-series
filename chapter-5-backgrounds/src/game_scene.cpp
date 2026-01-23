@@ -7,18 +7,7 @@
 #include "bn_bg_palettes.h"
 #include "types.hpp"
 
-#include "bn_regular_bg_map_cell.h"
-#include "bn_regular_bg_map_cell_info.h"
-#include "bn_regular_bg_map_item.h"
-#include "bn_regular_bg_item.h"
-#include "bn_regular_bg_tiles_items_container.h"
-#include "bn_regular_bg_ptr.h"
-#include "bn_regular_bg_map_ptr.h"
-
-#include "bn_vector.h"
-
 #include "types.hpp"
-#include "block.hpp"
 #include "cursor.hpp"
 #include "colors.hpp"
 #include "container.hpp"

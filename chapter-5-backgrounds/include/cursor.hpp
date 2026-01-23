@@ -14,11 +14,8 @@
 #include "bn_vector.h"
 #include "entity.hpp"
 #include "types.hpp"
-#include "utils.hpp"
 #include "block.hpp"
 #include "bn_keypad.h"
-
-#include "bn_log.h"
 
 // this is a forward declaration
 template <u8 NUM_BLOCKS>
