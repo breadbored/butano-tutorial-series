@@ -39,7 +39,7 @@ public:
      * @brief Call this every frame
      */
     template <u8 NUM_BLOCKS>
-    void update(Container<NUM_BLOCKS> *container, bn::vector<Block, 5> *block_vec) {
+    void update(Container<NUM_BLOCKS> *container, bn::vector<Block, NUM_BLOCKS> *block_vec) {
         // When A is pressed, the cursor should find a block to grab
         if (bn::keypad::a_pressed() && grabbed_block == nullptr) {
             for (int i = 0; i < block_vec->size(); i++) {
@@ -97,6 +97,11 @@ public:
                         collided = true;
                     }
                 }
+            }
+
+            // Adding the Container edge collision check
+            if (grabbed_block->collides_with_wall(new_position, container->tl(), container->br())) {
+                collided = true;
             }
 
             if (!collided) {

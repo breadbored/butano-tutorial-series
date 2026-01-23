@@ -110,6 +110,15 @@ public:
                (possible_position.y() + this->bounds.second.y() > other->position.y() + other->bounds.first.y());
     }
 
+    bool collides_with_wall(bn::point possible_position, bn::point tl, bn::point br) {
+        return (
+            (possible_position.x() + this->bounds.first.x() < tl.x())  ||
+            (possible_position.y() + this->bounds.first.y() < tl.y())  ||
+            (possible_position.x() + this->bounds.second.x() > br.x()) ||
+            (possible_position.y() + this->bounds.second.y() > br.y())
+        );
+    }
+
     LockedAxis locked_axis = LockedAxis::NoAxis;
 
     Box bounds = Box(

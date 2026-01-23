@@ -31,7 +31,8 @@ template <u8 NUM_BLOCKS>
 class Container {
 public:
     Container(u8 width, u8 height, const LevelPair *level_blocks, u8 num_level_blocks)
-    : width(width), height(height) {
+    : width(width), height(height),
+      actual_width((width - 2) * 8), actual_height((height - 2) * 8) {
         // Make sure there's an even width and height of tiles
         BN_ASSERT(width % 2 == 0 && height % 2 == 0, "The tile map must be an even number height and width");
 
@@ -55,6 +56,8 @@ public:
 
     u8 width = 16;
     u8 height = 16;
+    u8 actual_width = 16 * 8;
+    u8 actual_height = 16 * 8;
 
     // Scene stuff
     Cursor cursor = Cursor({0, -32});
@@ -62,11 +65,26 @@ public:
 
     // Render function
     void update() {
-        cursor.update(this, &block_list);
+        // We changed the cursor update function to support parameters so that it has
+        // context for collision
+        cursor.update<NUM_BLOCKS>(this, &block_list);
         for (int i = 0; i < block_list.size(); i++) {
             auto block = &block_list.at(i);
             block->update();
         }
+    }
+
+    bn::point tl() {
+        return bn::point({
+            -(actual_width >> 1), // aka, -(actual_width / 2)
+            -(actual_height >> 1) // aka, -(actual_height / 2)
+        });
+    }
+    bn::point br() {
+        return bn::point({
+            (actual_width >> 1),
+            (actual_height >> 1)
+        });
     }
 
 private:
