@@ -4,12 +4,14 @@
  */
 
 #include "bn_core.h"
+#include "bn_bg_palettes.h"
 
 #include "bn_vector.h"
 
 #include "types.hpp"
 #include "block.hpp"
 #include "cursor.hpp"
+#include "colors.hpp"
 
 // This is sorta how our levels will be built
 // This is just for a draft
@@ -43,6 +45,10 @@ const LevelPair level_blocks[NUM_BLOCKS] = {
 };
 
 void second_scene() {
+    bn::bg_palettes::set_transparent_color(
+        bread::palettes::VIVIDMEMORY8::blue
+    );
+
     // Set up the Cursor we created
     Cursor cursor = Cursor({0, -32});
 
