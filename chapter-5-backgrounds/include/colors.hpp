@@ -9,6 +9,7 @@
 #include "bn_color.h"
 #include "bn_sprite_palette_item.h"
 #include "bn_sprite_palette_ptr.h"
+#include "bn_bg_palette_item.h"
 #include "bn_span.h"
 
 namespace bread {
@@ -107,6 +108,7 @@ namespace bread {
         */
         namespace VIVIDMEMORY8 {
             inline bn::color colors_arr[16];
+            inline bn::color bg_colors_arr[16];
 
             /**
              * @brief
@@ -200,13 +202,28 @@ namespace bread {
                 fill_16_color_palette(
                     colors_arr,
                     deep_dark_maroon,
-                    creamy_white,
                     red,
                     orange,
                     yellow,
                     dark_blue,
                     blue,
-                    cyan
+                    cyan,
+                    creamy_white
+                ),
+                bn::bpp_mode::BPP_4
+            );
+
+            const bn::bg_palette_item bg_palette_item = bn::bg_palette_item(
+                fill_16_color_palette(
+                    bg_colors_arr,
+                    yellow,
+                    deep_dark_maroon,
+                    orange,
+                    red,
+                    dark_blue,
+                    blue,
+                    cyan,
+                    creamy_white
                 ),
                 bn::bpp_mode::BPP_4
             );

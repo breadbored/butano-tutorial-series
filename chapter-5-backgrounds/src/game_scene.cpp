@@ -5,6 +5,15 @@
 
 #include "bn_core.h"
 #include "bn_bg_palettes.h"
+#include "types.hpp"
+
+#include "bn_regular_bg_map_cell.h"
+#include "bn_regular_bg_map_cell_info.h"
+#include "bn_regular_bg_map_item.h"
+#include "bn_regular_bg_item.h"
+#include "bn_regular_bg_tiles_items_container.h"
+#include "bn_regular_bg_ptr.h"
+#include "bn_regular_bg_map_ptr.h"
 
 #include "bn_vector.h"
 
@@ -12,6 +21,7 @@
 #include "block.hpp"
 #include "cursor.hpp"
 #include "colors.hpp"
+#include "container_tiles.hpp"
 
 // This is sorta how our levels will be built
 // This is just for a draft
@@ -44,10 +54,26 @@ const LevelPair level_blocks[NUM_BLOCKS] = {
     ),
 };
 
+const u8 CONTAINER_BG_WIDTH = 32;
+const u8 CONTAINER_BG_HEIGHT = 32;
+
 void game_scene() {
     bn::bg_palettes::set_transparent_color(
         bread::palettes::VIVIDMEMORY8::blue
     );
+
+    // Set up the background tilemap
+    bn::regular_bg_map_cell _ui_cells[CONTAINER_BG_WIDTH * CONTAINER_BG_HEIGHT];
+    bn::regular_bg_map_item _map_item = bn::regular_bg_map_item(*_ui_cells, bn::size(CONTAINER_BG_WIDTH, CONTAINER_BG_HEIGHT));
+    bn::regular_bg_item _bg_item = bn::regular_bg_item(
+        bn::regular_bg_tiles_items::container,
+        bread::palettes::VIVIDMEMORY8::bg_palette_item,
+        _map_item
+    );
+    bn::regular_bg_ptr _bg = _bg_item.create_bg(0, 0);
+
+    bread::container_tiles::fill_container(CONTAINER_BG_WIDTH, CONTAINER_BG_HEIGHT, _ui_cells, _map_item, _bg);
+    bread::container_tiles::fill_container(CONTAINER_BG_WIDTH, CONTAINER_BG_HEIGHT, _ui_cells, _map_item, _bg);
 
     // Set up the Cursor we created
     Cursor cursor = Cursor({0, -32});

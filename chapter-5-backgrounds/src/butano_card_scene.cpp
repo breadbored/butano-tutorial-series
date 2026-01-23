@@ -7,6 +7,7 @@
 #include "bn_regular_bg_ptr.h"
 #include "bn_regular_bg_item.h"
 #include "bn_regular_bg_items_madewithbutano.h"
+#include "bn_keypad.h"
 
 #include "types.hpp"
 #include "globals.hpp"
@@ -17,6 +18,9 @@ void butano_card_scene() {
 
     for (int i = 0; i < 120; i++)
     {
+        if (i > 30 && bn::keypad::any_pressed()) {
+            break;
+        }
         bn::core::update();
     }
 
