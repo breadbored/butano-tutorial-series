@@ -3,58 +3,56 @@
  * Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License @ LICENSE.md file.
  */
 
- #include "colors.hpp"
+#include "colors.hpp"
 
- #include "globals.hpp"
+#include "globals.hpp"
 
- #include "fonts/felt_32x32_font.hpp"
+#include "fonts/marker_16x16_font.hpp"
 
- #include "bn_core.h"
- #include "bn_keypad.h"
- #include "bn_sprite_ptr.h"
- #include "bn_sprite_item.h"
- #include "bn_sprite_text_generator.h"
- #include "bn_string.h"
+#include "bn_core.h"
+#include "bn_keypad.h"
+#include "bn_sprite_ptr.h"
+#include "bn_sprite_item.h"
+#include "bn_sprite_text_generator.h"
+#include "bn_string.h"
+#include "bn_regular_bg_ptr.h"
+
+#include "bn_regular_bg_items_level_1_title_art.h"
+
+#include "types.hpp"
 
 void title_scene() {
+
+    bn::regular_bg_ptr title_card = bn::regular_bg_items::level_1_title_art.create_bg(0, 0);
+
     bn::sprite_text_generator text_generator(
-        fonts::felt_32x32_sprite_font,
+        fonts::marker_16x16_sprite_font,
         bread::palettes::VIVIDMEMORY8::sprite_palette_item
     );
-    text_generator.set_center_alignment();
-    bn::string<8> title_message_string = "Entities";
-    bn::vector<bn::sprite_ptr, 8> title_message_sprites;
-    text_generator.generate(
-        0, -60,
-        title_message_string,
-        title_message_sprites
-    );
 
-    bn::string<9> subtitle_message_string = "Chapter 4";
+    text_generator.set_center_alignment();
+
+    bn::string<9> subtitle_message_string = "Chapter 5";
     bn::vector<bn::sprite_ptr, 9> subtitle_message_sprites;
     text_generator.generate(
-        0, -40,
+        0, 40,
         subtitle_message_string,
         subtitle_message_sprites
     );
 
-    bn::string<16> button_message_string = "Press any button";
-    bn::vector<bn::sprite_ptr, 16> button_message_sprites;
+    bn::string<19> title_message_string = "Backgrounds & Tiles";
+    bn::vector<bn::sprite_ptr, 19> title_message_sprites;
     text_generator.generate(
-        0, 0,
-        button_message_string,
-        button_message_sprites
+        0, 56,
+        title_message_string,
+        title_message_sprites
     );
 
-    while(true)
-    {
-        // Let's listen for when any button is pressed
-        if (bn::keypad::any_pressed()) {
-            scene = SceneEnum::SecondScene; // update the scene
-            bn::core::update(); // give the final update
-            break; // exit the scene loop
-        }
-
-        bn::core::update(); // draw the frame otherwise
+    // Show for 240 frames
+    for (int i = 0; i < 240; i++) {
+        bn::core::update();
     }
+
+    scene = SceneEnum::ButanoScene; // update the scene
+    bn::core::update(); // give the final update
 }
