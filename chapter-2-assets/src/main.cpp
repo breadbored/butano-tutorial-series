@@ -9,6 +9,7 @@
 #include "bn_sprite_ptr.h"
 #include "bn_sprite_text_generator.h"
 #include "bn_sprite_tiles_ptr.h"
+#include "bn_math.h"
 
 #include "bn_keypad.h"
 
@@ -89,7 +90,9 @@ int main()
                 48
             )
         );
-        // Tell the sprite to use the tile at `sprite_index`
+
+        // To set the frame of the sprite we want to display,
+        // we tell the sprite to use the tile at `sprite_index`
         block_list.at(i).set_tiles(
             block_sprite_item.tiles_item().create_tiles(sprite_index)
         );
@@ -98,27 +101,17 @@ int main()
     // You will now see all 7 sprites.
     // 1 above, 6 below from the list using different tiles from the spritesheet
 
+    // Frames don't "know" about data defined in previous frames.
+    // This has to do with scopes, which we will cover in the next chapter as well.
+    // For now, just know we must define `wave` outside of the loop to keep track of its value.
+    bn::fixed wave = 0; // you will need to include `bn_fixed.h` at the top of the file
 
-    while(true)
-    {
-        // Let's listen for when the A button is pressed
-        if (bn::keypad::a_pressed()) {
-            // when pressed (the first frame down), change the header text
-
-            // title
-            title_message_sprites.clear();
-            text_generator.generate(
-                0, -60,
-                "Congrats!",
-                title_message_sprites
-            );
-            // subtitle
-            subtitle_message_sprites.clear();
-            text_generator.generate(
-                0, -40,
-                "You did Chapter 2",
-                subtitle_message_sprites
-            );
+    while (true) {
+        for (u16 i = 0; i < block_list.size(); i++) {
+            auto fit = block_list.at(i);
+            wave += bn::fixed(0.0025);
+            const auto h = bn::sin(wave + (bn::fixed(0.05) * i));
+            fit.set_y(48 + (h * 5));
         }
 
         bn::core::update();
