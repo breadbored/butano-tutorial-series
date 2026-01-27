@@ -130,21 +130,9 @@ public:
         const u8 half_height = (32 >> 1) - (height >> 1);
 
         const bool left = (possible_position.x() + this->bounds.first.x() < ((opening.x() - half_width) * 8) + 4);
-        BN_LOG(
-            "Left ", left ? "Hits" : "Misses"
-        );
         const bool top = (possible_position.y() + this->bounds.first.y() < ((opening.y() - half_height) * 8) + 16);
-        BN_LOG(
-            "Top ", top ? "Hits" : "Misses"
-        );
         const bool right = (possible_position.x() + this->bounds.second.x() > ((opening.x() - half_width) * 8) - 4);
-        BN_LOG(
-            "Right ", right ? "Hits" : "Misses"
-        );
         const bool bottom = (possible_position.y() + this->bounds.second.y() > ((opening.y() - half_height) * 8) - 16);
-        BN_LOG(
-            "Bottom ", bottom ? "Hits" : "Misses"
-        );
 
         return (
             // Left
