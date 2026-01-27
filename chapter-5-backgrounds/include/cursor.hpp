@@ -94,8 +94,11 @@ public:
                 }
             }
 
+            if (grabbed_block->collides_with_wall_cutout(new_position, container->width, container->height, container->opening_position)) {
+                collided = false;
+            }
             // Adding the Container edge collision check
-            if (grabbed_block->collides_with_wall(new_position, container->bounds())) {
+            else if (grabbed_block->collides_with_wall(new_position, container->bounds())) {
                 collided = true;
             }
 

@@ -3,6 +3,8 @@
  * Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License @ LICENSE.md file.
  */
 
+ #define DEBUG true
+
 #include "bn_core.h"
 
 #include "bn_bg_palettes.h"

@@ -14,6 +14,8 @@
 #include "entity.hpp"
 #include "types.hpp"
 
+#include "debug.hpp"
+
 class Block : public Entity {
 public:
     Block(bn::point _position, BlockType _block_type)
@@ -120,6 +122,39 @@ public:
             (possible_position.y() + this->bounds.first.y() < container_bounds.first.y())  ||
             (possible_position.x() + this->bounds.second.x() > container_bounds.second.x()) ||
             (possible_position.y() + this->bounds.second.y() > container_bounds.second.y())
+        );
+    }
+
+    bool collides_with_wall_cutout(bn::point possible_position, int width, int height, bn::point opening) {
+        const u8 half_width = (32 >> 1) - (width >> 1);
+        const u8 half_height = (32 >> 1) - (height >> 1);
+
+        const bool left = (possible_position.x() + this->bounds.first.x() < ((opening.x() - half_width) * 8) + 4);
+        BN_LOG(
+            "Left ", left ? "Hits" : "Misses"
+        );
+        const bool top = (possible_position.y() + this->bounds.first.y() < ((opening.y() - half_height) * 8) + 16);
+        BN_LOG(
+            "Top ", top ? "Hits" : "Misses"
+        );
+        const bool right = (possible_position.x() + this->bounds.second.x() > ((opening.x() - half_width) * 8) - 4);
+        BN_LOG(
+            "Right ", right ? "Hits" : "Misses"
+        );
+        const bool bottom = (possible_position.y() + this->bounds.second.y() > ((opening.y() - half_height) * 8) - 16);
+        BN_LOG(
+            "Bottom ", bottom ? "Hits" : "Misses"
+        );
+
+        return (
+            // Left
+            left   &&
+            // Top
+            top  &&
+            // Right
+            right  &&
+            // Bottom
+            bottom
         );
     }
 
