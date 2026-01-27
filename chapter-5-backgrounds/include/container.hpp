@@ -6,6 +6,7 @@
 #ifndef BREAD_CONTAINER_HPP
 #define BREAD_CONTAINER_HPP
 
+#include "bn_point.h"
 #include "types.hpp"
 
 #include "bn_regular_bg_map_cell.h"
@@ -17,6 +18,7 @@
 #include "bn_regular_bg_tiles_items_container.h"
 #include "bn_bg_palette_items_container_pal.h"
 #include "bn_assert.h"
+#include "bn_core.h"
 
 #include "bn_vector.h"
 
@@ -50,7 +52,7 @@ public:
         // blow out the background with clear tiles
         clear_container(CONTAINER_BG_WIDTH, CONTAINER_BG_HEIGHT, _ui_cells, _map_item, _bg);
         // draw the container
-        build_container(CONTAINER_BG_WIDTH, CONTAINER_BG_HEIGHT, width, height, _ui_cells, _map_item, _bg);
+        build_container(this, CONTAINER_BG_WIDTH, CONTAINER_BG_HEIGHT, width, height, _ui_cells, _map_item, _bg);
     }
 
     ~Container() {
@@ -59,8 +61,8 @@ public:
 
     u8 width = 16;
     u8 height = 16;
-    u8 actual_width = 16 * 8;
-    u8 actual_height = 16 * 8;
+    u16 actual_width = 16 * 8;
+    u16 actual_height = 16 * 8;
     bn::point relative_position = {0, 0};
 
     // Scene stuff
@@ -133,6 +135,7 @@ private:
 
     // Build the frame of the container
     static void build_container(
+        Container *_this,
         u8 max_width,
         u8 max_height,
         u8 width,
@@ -150,6 +153,7 @@ private:
                     _map_item.cell_index(x + half_width, y + half_height)
                 ];
                 bn::regular_bg_map_cell_info current_cell_info(current_cell);
+
 
                 // outer corners
                 if (x == 0 && y == 0) {

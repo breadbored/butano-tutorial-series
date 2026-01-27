@@ -72,4 +72,6 @@ enum BlockType : u8 {
 typedef bn::pair<bn::point, bn::point> Box;
 typedef bn::pair<BlockType, bn::point> LevelPair; // this is a shorthand for the level structure
 
+typedef bn::pair<s16, s16> SmallIntPoint;
+
 #endif
