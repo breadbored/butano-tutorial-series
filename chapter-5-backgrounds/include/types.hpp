@@ -74,4 +74,12 @@ typedef bn::pair<BlockType, bn::point> LevelPair; // this is a shorthand for the
 
 typedef bn::pair<s16, s16> SmallIntPoint;
 
+// this is a forward declaration
+template <u8 NUM_BLOCKS>
+class Container;
+// this is saying "we promise this will be defined later."
+// the purpose of the forward declaration is to prevent circular dependencies.
+// Container imports Cursor, so Cursor can't import Container.
+// If you make this promise, Cursor will trust that this will be defined later.
+
 #endif

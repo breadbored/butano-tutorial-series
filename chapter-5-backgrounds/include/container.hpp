@@ -35,7 +35,8 @@ class Container {
 public:
     Container(u8 _width, u8 _height, const LevelPair *level_blocks, u8 num_level_blocks)
     : width(_width), height(_height),
-      actual_width((_width - 2) * 8), actual_height((_height - 2) * 8) {
+      actual_width((_width - 2) * 8), actual_height((_height - 2) * 8),
+      opening_position({_width - 1, 5}) {
         // Make sure there's an even width and height of tiles
         BN_ASSERT(width % 2 == 0 && height % 2 == 0, "The tile map must be an even number height and width");
 
@@ -52,7 +53,7 @@ public:
         // blow out the background with clear tiles
         clear_container(CONTAINER_BG_WIDTH, CONTAINER_BG_HEIGHT, _ui_cells, _map_item, _bg);
         // draw the container
-        build_container(this, CONTAINER_BG_WIDTH, CONTAINER_BG_HEIGHT, width, height, _ui_cells, _map_item, _bg);
+        build_container(this, CONTAINER_BG_WIDTH, CONTAINER_BG_HEIGHT, width, height, opening_position, _ui_cells, _map_item, _bg);
     }
 
     ~Container() {
@@ -61,9 +62,13 @@ public:
 
     u8 width = 16;
     u8 height = 16;
-    u16 actual_width = 16 * 8;
-    u16 actual_height = 16 * 8;
+    u16 actual_width = 14 * 8;
+    u16 actual_height = 14 * 8;
     bn::point relative_position = {0, 0};
+
+    bn::point opening_position = {
+        width - 1, 4
+    };
 
     // Scene stuff
     Cursor cursor = Cursor({0, -32});
@@ -140,6 +145,7 @@ private:
         u8 max_height,
         u8 width,
         u8 height,
+        bn::point opening_position,
         bn::regular_bg_map_cell *_ui_cells,
         bn::regular_bg_map_item &_map_item,
         bn::regular_bg_ptr &_bg
@@ -154,9 +160,52 @@ private:
                 ];
                 bn::regular_bg_map_cell_info current_cell_info(current_cell);
 
-
+                // opening
+                if (
+                    (opening_position.x() == 0 || opening_position.x() == width - 1) &&
+                    opening_position.x() == x &&
+                    (
+                        (opening_position.y() + 1 == y) ||
+                        (opening_position.y() == y) ||
+                        (opening_position.y() - 1 == y) ||
+                        (opening_position.y() - 2 == y)
+                    )
+                ) {
+                    // caps
+                    if (opening_position.x() == x && opening_position.y() + 1 == y) {
+                        // top cap
+                        current_cell_info.set_tile_index(CONTAINER_CAP_UP);
+                    } else if (opening_position.x() == x && opening_position.y() - 2 == y) {
+                        // bottom cap
+                        current_cell_info.set_tile_index(CONTAINER_CAP_DOWN);
+                    } else {
+                        // opening
+                        current_cell_info.set_tile_index(CONTAINER_BLANK);
+                    }
+                } else if (
+                    (opening_position.y() == 0 || opening_position.y() == height - 1) &&
+                    opening_position.y() == y &&
+                    (
+                        (opening_position.x() + 1 == x) ||
+                        (opening_position.x() == x) ||
+                        (opening_position.x() - 1 == x) ||
+                        (opening_position.x() - 2 == x)
+                    )
+                ) {
+                    // caps
+                    if (opening_position.y() == y && opening_position.x() + 1 == x) {
+                        // top cap
+                        current_cell_info.set_tile_index(CONTAINER_CAP_LEFT);
+                    } else if (opening_position.y() == y && opening_position.x() - 2 == x) {
+                        // bottom cap
+                        current_cell_info.set_tile_index(CONTAINER_CAP_RIGHT);
+                    } else {
+                        // opening
+                        current_cell_info.set_tile_index(CONTAINER_BLANK);
+                    }
+                }
                 // outer corners
-                if (x == 0 && y == 0) {
+                else if (x == 0 && y == 0) {
                     // Top-Left
                     current_cell_info.set_tile_index(CONTAINER_TL);
                 } else if (x == width - 1 && y == 0) {
