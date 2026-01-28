@@ -11,6 +11,7 @@
 #include "bn_sprite_item.h"
 #include "bn_sprite_tiles_ptr.h"
 #include "bn_sprite_items_cursor.h"
+#include "bn_camera_ptr.h"
 #include "bn_vector.h"
 #include "entity.hpp"
 #include "types.hpp"
@@ -19,12 +20,13 @@
 
 class Cursor : public Entity {
 public:
-    Cursor(bn::point _position)
+    Cursor(bn::camera_ptr p_camera, bn::point _position)
         : Entity(
             bn::sprite_items::cursor,
             _position
         ) {
-        p_sprite.set_z_order(-10);
+        this->p_sprite.set_z_order(-10);
+        this->p_sprite.set_camera(p_camera);
     }
 
     ~Cursor() {

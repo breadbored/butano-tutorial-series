@@ -6,6 +6,7 @@
 #ifndef BREAD_BLOCK_HPP
 #define BREAD_BLOCK_HPP
 
+#include "bn_camera_ptr.h"
 #include "bn_point.h"
 #include "bn_sprite_ptr.h"
 #include "bn_sprite_tiles_ptr.h"
@@ -18,19 +19,21 @@
 
 class Block : public Entity {
 public:
-    Block(bn::point _position, BlockType _block_type)
+    Block(bn::camera_ptr p_camera, bn::point _position, BlockType _block_type)
         : Entity(
             bn::sprite_items::klotski_blocks,
             _position
         ), _type(_block_type) {
         this->init();
+        this->p_sprite.set_camera(p_camera);
     }
-    Block(bn::point _position)
+    Block(bn::camera_ptr p_camera, bn::point _position)
         : Entity(
             bn::sprite_items::klotski_blocks,
             _position
         ), _type(BlockType::BlockType_DoubleWideY) {
         this->init();
+        this->p_sprite.set_camera(p_camera);
     }
 
     ~Block() {
@@ -142,9 +145,9 @@ public:
         // If so, we will be disabling the wall collision in the cursor.hpp.
         // This is called a "Collision Mask"
         const bool left = (possible_position.x() + this->bounds.first.x() < ((opening.x() - half_width) << 3) + 4);
-        const bool top = (possible_position.y() + this->bounds.first.y() < ((opening.y() - half_height) << 3) + 8);
-        const bool right = (possible_position.x() + this->bounds.second.x() > ((opening.x() - half_width) << 3) - 4);
-        const bool bottom = (possible_position.y() + this->bounds.second.y() > ((opening.y() - half_height) << 3) - 8);
+        const bool top = (possible_position.y() + this->bounds.first.y() < ((opening.y() - half_height) << 3) + 4);
+        const bool right = (possible_position.x() + this->bounds.second.x() > ((opening.x() - half_width) << 3));
+        const bool bottom = (possible_position.y() + this->bounds.second.y() > ((opening.y() - half_height) << 3));
 
         // This block must be overlapping the opening
         return (

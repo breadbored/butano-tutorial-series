@@ -48,7 +48,7 @@ public:
         // Init blocks
         for (int i = 0; i < block_list.max_size(); i++) {
             block_list.push_back(
-                Block(level_blocks[i].second, level_blocks[i].first)
+                Block(p_camera, level_blocks[i].second, level_blocks[i].first)
             );
         }
 
@@ -56,6 +56,8 @@ public:
         clear_container(CONTAINER_BG_WIDTH, CONTAINER_BG_HEIGHT, _ui_cells, _map_item, _bg);
         // draw the container
         build_container(this, CONTAINER_BG_WIDTH, CONTAINER_BG_HEIGHT, width, height, opening_position, _ui_cells, _map_item, _bg);
+
+        this->_bg.set_camera(p_camera);
     }
 
     ~Container() {
@@ -77,7 +79,7 @@ public:
     };
 
     // Scene stuff
-    Cursor cursor = Cursor({0, -32});
+    Cursor cursor = Cursor(p_camera,{0, -32});
     bn::vector<Block, NUM_BLOCKS> block_list;
 
     // Render function

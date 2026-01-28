@@ -49,7 +49,7 @@ void title_scene() {
     );
 
     // Show for 240 frames
-    for (int i = 0; i < 240; i++) {
+    for (int i = 0; i < 60; i++) {
         bn::core::update();
     }
 
