@@ -34,7 +34,8 @@ template <u8 NUM_BLOCKS>
 class Container {
 public:
     Container(u8 _width, u8 _height, const LevelPair *level_blocks, u8 num_level_blocks)
-    : width(_width), height(_height),
+    : max_width(CONTAINER_BG_WIDTH), max_height(CONTAINER_BG_HEIGHT),
+      width(_width), height(_height),
       actual_width((_width - 2) * 8), actual_height((_height - 2) * 8),
       opening_position({_width - 1, 5}) {
         // Make sure there's an even width and height of tiles
@@ -60,6 +61,8 @@ public:
         // called on destroy!
     }
 
+    u8 max_width = 16;
+    u8 max_height = 16;
     u8 width = 16;
     u8 height = 16;
     u16 actual_width = 14 * 8;

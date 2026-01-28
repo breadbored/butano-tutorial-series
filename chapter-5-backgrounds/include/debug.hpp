@@ -16,6 +16,7 @@
     #endif
 #endif
 // `BN_CFG_LOG_ENABLED` will determine if logging is enabled or not through `BN_LOG`
+
 #include "bn_log.h"
 
 #endif

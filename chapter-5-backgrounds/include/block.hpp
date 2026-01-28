@@ -110,6 +110,9 @@ public:
     }
 
     bool collides(Block *other, bn::point possible_position) {
+        // Do an AABB collision check to see if the block is colliding with the other block
+        // Check if the block overlaps with the other block
+        // This means all of these need to be true to collide
         return (possible_position.x() + this->bounds.first.x() < other->position.x() + other->bounds.second.x()) &&
                (possible_position.y() + this->bounds.first.y() < other->position.y() + other->bounds.second.y()) &&
                (possible_position.x() + this->bounds.second.x() > other->position.x() + other->bounds.first.x()) &&
@@ -117,6 +120,9 @@ public:
     }
 
     bool collides_with_wall(bn::point possible_position, Box container_bounds) {
+        // Do an AABB collision check to see if the block is colliding with the wall
+        // Check if the block goes OUTSIDE the container
+        // This means any of these need to be true to collide
         return (
             (possible_position.x() + this->bounds.first.x() < container_bounds.first.x())  ||
             (possible_position.y() + this->bounds.first.y() < container_bounds.first.y())  ||
@@ -125,23 +131,26 @@ public:
         );
     }
 
-    bool collides_with_wall_cutout(bn::point possible_position, int width, int height, bn::point opening) {
-        const u8 half_width = (32 >> 1) - (width >> 1);
-        const u8 half_height = (32 >> 1) - (height >> 1);
+    bool collides_with_wall_cutout(bn::point possible_position, int max_width, int max_height, int width, int height, bn::point opening) {
+        // Adjust the 0,0 coordinate reference to the top-left corner of the container,
+        // rather than the center of the screen
+        const u8 half_width = (max_width >> 1) - (width >> 1);
+        const u8 half_height = (max_height >> 1) - (height >> 1);
 
-        const bool left = (possible_position.x() + this->bounds.first.x() < ((opening.x() - half_width) * 8) + 4);
-        const bool top = (possible_position.y() + this->bounds.first.y() < ((opening.y() - half_height) * 8) + 16);
-        const bool right = (possible_position.x() + this->bounds.second.x() > ((opening.x() - half_width) * 8) - 4);
-        const bool bottom = (possible_position.y() + this->bounds.second.y() > ((opening.y() - half_height) * 8) - 16);
+        // Do an AABB collision check to see if the block is entering the opening
+        // Much like the collision with other blocks, we check if the block overlaps with the opening
+        // If so, we will be disabling the wall collision in the cursor.hpp.
+        // This is called a "Collision Mask"
+        const bool left = (possible_position.x() + this->bounds.first.x() < ((opening.x() - half_width) << 3) + 4);
+        const bool top = (possible_position.y() + this->bounds.first.y() < ((opening.y() - half_height) << 3) + 8);
+        const bool right = (possible_position.x() + this->bounds.second.x() > ((opening.x() - half_width) << 3) - 4);
+        const bool bottom = (possible_position.y() + this->bounds.second.y() > ((opening.y() - half_height) << 3) - 8);
 
+        // This block must be overlapping the opening
         return (
-            // Left
-            left   &&
-            // Top
-            top  &&
-            // Right
-            right  &&
-            // Bottom
+            left  &&
+            top   &&
+            right &&
             bottom
         );
     }
