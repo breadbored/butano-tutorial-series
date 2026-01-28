@@ -7,6 +7,7 @@
 #define BREAD_CONTAINER_HPP
 
 #include "bn_point.h"
+#include "bn_sprite_ptr.h"
 #include "types.hpp"
 
 #include "bn_regular_bg_map_cell.h"
@@ -17,6 +18,8 @@
 #include "bn_regular_bg_map_ptr.h"
 #include "bn_regular_bg_tiles_items_container.h"
 #include "bn_bg_palette_items_container_pal.h"
+#include "bn_regular_bg_items_level_1_art.h"
+#include "bn_sprite_text_generator.h"
 #include "bn_assert.h"
 #include "bn_camera_ptr.h"
 #include "bn_core.h"
@@ -27,6 +30,8 @@
 #include "container_tiles.hpp"
 #include "cursor.hpp"
 #include "block.hpp"
+
+#include "marker_16x16_font.hpp"
 
 constexpr u8 CONTAINER_BG_WIDTH = 32;
 constexpr u8 CONTAINER_BG_HEIGHT = 32;
@@ -58,6 +63,22 @@ public:
         build_container(this, CONTAINER_BG_WIDTH, CONTAINER_BG_HEIGHT, width, height, opening_position, _ui_cells, _map_item, _bg);
 
         this->_bg.set_camera(p_camera);
+
+        this->decoration.set_camera(p_camera);
+        this->decoration.set_priority(1);
+
+        p_camera.set_position(
+            -relative_position.x(),
+            -relative_position.y()
+        );
+
+        text_generator.set_left_alignment();
+        text_generator.set_bg_priority(0);
+        text_generator.generate(
+            -103, -67,
+            "Escape to Win",
+            this->right_text
+        );
     }
 
     ~Container() {
@@ -72,15 +93,25 @@ public:
     u8 height = 16;
     u16 actual_width = 14 * 8;
     u16 actual_height = 14 * 8;
-    bn::point relative_position = {0, 0};
-
+    bn::point relative_position = {
+        -50, 10
+    };
     bn::point opening_position = {
         width - 1, 4
     };
 
     // Scene stuff
-    Cursor cursor = Cursor(p_camera,{0, -32});
+    Cursor cursor = Cursor(p_camera, {0, -32});
     bn::vector<Block, NUM_BLOCKS> block_list;
+    bn::regular_bg_ptr decoration = bn::regular_bg_items::level_1_art.create_bg(0, 0);
+
+    bn::vector<bn::sprite_ptr, 64> right_text;
+    bn::sprite_text_generator text_generator = bn::sprite_text_generator(
+        // font
+        fonts::marker_16x16_sprite_font,
+        // optionally define a palette for color
+        bread::palettes::VIVIDMEMORY8::sprite_palette_item
+    );
 
     // Render function
     void update() {
@@ -131,14 +162,14 @@ public:
 
     bn::point tl() {
         return bn::point({
-            relative_position.x() + -(actual_width >> 1), // aka, -(actual_width / 2)
-            relative_position.y() + -(actual_height >> 1) // aka, -(actual_height / 2)
+            -(actual_width >> 1), // aka, -(actual_width / 2)
+            -(actual_height >> 1) // aka, -(actual_height / 2)
         });
     }
     bn::point br() {
         return bn::point({
-            relative_position.x() + (actual_width >> 1),
-            relative_position.y() + (actual_height >> 1)
+            (actual_width >> 1), // aka, (actual_width / 2)
+            (actual_height >> 1) // aka, (actual_height / 2)
         });
     }
     Box bounds() {

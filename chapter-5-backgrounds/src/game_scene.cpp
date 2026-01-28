@@ -5,10 +5,8 @@
 
 #include "bn_core.h"
 #include "bn_bg_palettes.h"
-#include "bn_regular_bg_items_level_1_art.h"
 
 #include "types.hpp"
-#include "cursor.hpp"
 #include "colors.hpp"
 #include "container.hpp"
 
@@ -51,9 +49,6 @@ void game_scene() {
     // Set up the container
     // The container is a constructor for our gameplay scene
     Container<NUM_BLOCKS> container = Container<NUM_BLOCKS>(16, 16, level_blocks, 5);
-
-    bn::regular_bg_ptr decoration = bn::regular_bg_items::level_1_art.create_bg(0, 0);
-    decoration.set_priority(0);
 
     while(true)
     {
