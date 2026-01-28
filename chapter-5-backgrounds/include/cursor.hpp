@@ -151,18 +151,24 @@ public:
                (other->position.y() + other->bounds.second.y() >= this->position.y());
     }
 
-private:
-    /**
-     * @brief A pointer reference to the block grabbed
-     */
-    Block* grabbed_block = nullptr;
-
     /**
      * @brief Grab a Block
      */
     void release_block() {
         grabbed_block = nullptr;
+
+        p_sprite.set_tiles(
+            sprite_item.tiles_item().create_tiles(
+                0
+            )
+        );
     }
+
+private:
+    /**
+     * @brief A pointer reference to the block grabbed
+     */
+    Block* grabbed_block = nullptr;
 };
 
 #endif

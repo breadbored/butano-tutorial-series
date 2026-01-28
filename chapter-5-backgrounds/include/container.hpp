@@ -18,6 +18,7 @@
 #include "bn_regular_bg_tiles_items_container.h"
 #include "bn_bg_palette_items_container_pal.h"
 #include "bn_assert.h"
+#include "bn_camera_ptr.h"
 #include "bn_core.h"
 
 #include "bn_vector.h"
@@ -61,6 +62,8 @@ public:
         // called on destroy!
     }
 
+    bn::camera_ptr p_camera = bn::camera_ptr::create();
+
     u8 max_width = 16;
     u8 max_height = 16;
     u8 width = 16;
@@ -79,12 +82,48 @@ public:
 
     // Render function
     void update() {
+        // We need to track when a block overlaps with the opening
+        Block *reached_goal_block = nullptr;
+
         // We changed the cursor update function to support parameters so that it has
         // context for collision
         cursor.update<NUM_BLOCKS>(this, &block_list);
         for (int i = 0; i < block_list.size(); i++) {
-            auto block = &block_list.at(i);
+            Block *block = &block_list.at(i);
             block->update();
+
+            // Once the block is in the opening, take over the rendering and move the block off-screen
+            // I am using `|=` to logically "or" the true/false, so that the result is true if any are true
+            if (
+                block->collides_with_wall_cutout(
+                    block->position,
+                    this->max_width,
+                    this->max_height,
+                    this->width,
+                    this->height,
+                    opening_position
+                )
+            ) {
+                reached_goal_block = block;
+            }
+        }
+
+        // Take over the rendering as a sub-sub-scene if there was a collision
+        if (reached_goal_block != nullptr) {
+            cursor.release_block();
+
+            // for 80 frames, move the block through the goal
+            for (int i = 0; i < 40; i++) {
+                // move only every other frame
+                bool should_move = i & 1; // equivalent to i % 2
+                if (should_move) {
+                    reached_goal_block->position.set_x(
+                        reached_goal_block->position.x() + 1
+                    );
+                    reached_goal_block->update();
+                }
+                bn::core::update();
+            }
         }
     }
 
